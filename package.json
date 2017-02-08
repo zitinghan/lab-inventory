@@ -39,5 +39,9 @@
   },
   "scripts": {
     "test": "karma start test\\karma.conf.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.1",
+    "mongoose": "^4.8.1"
   }
 }

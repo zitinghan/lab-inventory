@@ -1,23 +1,54 @@
 <div>
-
-	<div> <!-- Filter Function -->
-		<form class="form-inline groupInput">
-		  <div class="form-group">
-		    <label for="supplier">Supplier: </label>
-		    <input type="text" class="form-control" id="supplier" placeholder="VWR">
-		  </div>
-		  <div class="form-group">
-		    <label for="itemless">Item Less Than > </label>
-		    <input type="text" class="form-control" id="itemless" placeholder="9">
-		  </div>
-		  <div class="form-group">
-		  	<input class="form-control" id="itemAlert" type="checkbox">
-		  	<label for="itemAlert">Item alert</label>
-		  </div>
-		  <button type="submit" class="btn btn-default">Filter</button>
-		</form>
-	</div><!-- Filter Function -->
+	<div class="row"> <!-- top bar -->
+		<div class="col-sm-8"> <!-- Filter Function -->
+			<form class="form-inline groupInput">
+			  <div class="form-group">
+			    <label for="supplier">Supplier: </label>
+			    <select class="form-control" ng-model="consume.consume.filter.supplierName">
+				  <option value="1">1</option>
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>5</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="itemless">Item Less Than > </label>
+			    <input type="text" class="form-control" id="itemless" placeholder="9">
+			  </div>
+			  <div class="form-group">
+			  	<input class="form-control" id="itemAlert" type="checkbox">
+			  	<label for="itemAlert">Item alert</label>
+			  </div>
+			  <button type="submit" class="btn btn-default">Filter</button>
+			</form>
+		</div><!-- Filter Function -->
+		<div class="col-sm-4 text-right">
+			<button type="button" class="btn btn-info" ng-click="consume.consume.add()">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Data
+			</button>
+			<button type="button" class="btn btn-info" ng-click="consume.supplier.add()">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Supplier
+			</button>
+		</div>
+	</div> <!-- top bar -->
+	
 	<br/>
+	<div ng-if="consume.supplier.isAdd">
+		<form class="form-inline groupInput">
+			<div class="form-group">
+			    <label for="supplierName">Supplier Name: </label>
+			    <input type="text" class="form-control" id="supplierName" placeholder="Supplier Name" ng-model="consume.supplier.new.supplierName">
+			</div>
+			<button type="button" class="btn btn-success" ng-click="consume.supplier.insert()">
+				<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Add
+			</button>
+			<button type="button" class="btn btn-danger" ng-click="consume.supplier.cancelInsert()">
+				<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+			</button>
+		</form>
+		<br/>
+	</div>
 	<div> <!-- Listing Function -->
 		<table class="table table-hover table-bordered">
 			<thead>
@@ -33,15 +64,44 @@
 				</tr>
 			</thead>
 			<tbody>
+				<tr ng-if="consume.consume.isNew">
+					<td></td>
+					<td><input class="form-control" type="text" ng-model="consume.consume.new.supplier"></td>
+					<td><input class="form-control" type="text" ng-model="consume.consume.new.item"></td>
+					<td><input class="form-control" type="text" ng-model="consume.consume.new.noItem"></td>
+					<td><input class="form-control" type="text" ng-model="consume.consume.new.quantity"></td>
+					<td><input class="form-control" type="text" ng-model="consume.consume.new.uPrice"></td>
+					<td><input class="form-control" type="text" ng-model="consume.consume.new.note"></td>
+					<td width="10%" class="text-center">
+						<button type="button" class="btn btn-success" ng-click="consume.consume.add()">
+							<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Add
+						</button>
+						<button type="button" class="btn btn-danger" ng-click="consume.consume.cancelInsert()">
+							<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+						</button>
+					</td>
+				</tr>
 				<tr ng-repeat="val in consume.consume.data">
 					<td>{{$index+1}}</td>
 					<td>{{val.supplier}}</td>
 					<td>{{val.item}}</td>
-					<td>{{val.noItem}}</td>
-					<td>{{val.quantity}}</td>
-					<td>{{val.uPrice}}</td>
-					<td>{{val.note}}</td>
-					<td></td>
+
+					<td><input class="form-control" id="noItem_{{$index+1}}" type="text" ng-model="val.noItem" ng-disabled="!val.enable"></td>
+					<td><input class="form-control" id="quantity_{{$index+1}}" type="text" ng-model="val.quantity" ng-disabled="!val.enable"></td>
+					<td><input class="form-control" id="uPrice_{{$index+1}}" type="text" ng-model="val.uPrice" ng-disabled="!val.enable"></td>
+					<td><input class="form-control" id="note_{{$index+1}}" type="text" ng-model="val.note" ng-disabled="!val.enable"></td>
+
+					<td width="10%" class="text-center">
+						<button type="button" class="btn btn-primary" ng-click="consume.consume.edit(val)" ng-if="!val.enable">
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+						</button>
+						<button type="button" class="btn btn-success" ng-click="consume.consume.update(val)" ng-if="val.enable">
+							<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+						</button>
+						<button type="button" class="btn btn-danger" ng-click="val.enable=!val.enable" ng-if="val.enable">
+							<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+						</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
