@@ -7,5 +7,21 @@ angular.module('services', [])
     return {
         IPAddress: 'http://sgbippc0011:3000/', 
     }
-});
+})
 
+.factory('globalFunction', function(){
+    
+    return{
+        removeFilterEmpty: function(val){
+            var key = Object.keys(val);
+            for(var i in key){
+                if(typeof val[key[i]]=="undefined" || val[key[i]]===""){
+                    delete val[key[i]];
+                }
+            }  
+
+            return val;
+        },
+        
+    }
+});

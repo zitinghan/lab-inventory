@@ -1,11 +1,11 @@
 var mongoose    =   require("mongoose");
-
+var mongoSchema =   mongoose.Schema;
 var consumeSchema  = {
-    "supplier" : String,
+    "supplier" : {type: mongoSchema.Types.ObjectId, ref: 'supplier'},
     "item" : String,
-    "noItem" : String,
-    "quantity" : String,
-    "uPrice" : String,
+    "noItem" : Number,
+    "quantity" : Number,
+    "uPrice" : Number,
     "note" : String
 };
 module.exports = mongoose.model('consume', consumeSchema);;

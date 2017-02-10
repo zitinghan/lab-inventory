@@ -3,8 +3,10 @@ var app         =   express();
 var bodyParser  =   require("body-parser");
 var supplier     =   require("./models/mongo");
 var consume     =   require("./models/consume");
+var cors        =   require('cors');
 var router      =   express.Router();
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({"extended" : false}));
 
@@ -14,8 +16,6 @@ router.get("/",function(req,res){
 
 router.route("/supplier")
     .get(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
         var response = {};
         supplier.find({},function(err,data){
             if(err) {
@@ -27,8 +27,7 @@ router.route("/supplier")
         });
     })
     .post(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
         var db = new supplier();
         var response = {};
         db.supplier = req.body.supplier;
@@ -44,8 +43,6 @@ router.route("/supplier")
 
 router.route("/supplier/:id")
     .get(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
         var response = {};
         supplier.findById(req.params.id,function(err,data){
             if(err) {
@@ -60,11 +57,27 @@ router.route("/supplier/:id")
 
 
 router.route("/consume")
-    .get(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    .post(function(req,res){
+        
+        var condition = req.body.condition;
+        var filter = {};
+        
+        for(var i in condition){
+            if(i == 'lessThan'){
+                filter['quantity'] = {$lt: parseInt(condition[i])};
+            }else if(i == 'itemAlert'){
+                if(condition[i]==true){
+                    filter['quantity'] = {$lt: 9};
+                }
+            }else{
+                filter[i] = condition[i];
+            }
+        }
+
         var response = {};
-        consume.find({},function(err,data){
+        consume.find(filter)
+            .populate('supplier')
+            .exec(function(err,data){
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
@@ -72,11 +85,9 @@ router.route("/consume")
             }
             res.json(response);
         });
-    })
-    .post(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        console.log(res);
+    });
+
+router.route("/consume/insert").post(function(req,res){
         var db = new consume();
         var response = {};
         db.supplier = req.body.supplier;
@@ -95,13 +106,28 @@ router.route("/consume")
         });
     });
 
+/*router.route("/consume/filter/:condition")
+    .get(function(req,res){
+
+        console.log('123', req.params.condition);
+
+        var response = {};
+        consume.findById({},function(err,data){
+            if(err) {
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+                response = {"error" : false,"message" : data};
+            }
+            res.json(response);
+        });
+    })*/
+
 
 router.route("/consume/:id")
     .get(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
         var response = {};
-        consume.findById(req.params.id,function(err,data){
+        consume.find(req.params.id,function(err,data){
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
@@ -111,19 +137,17 @@ router.route("/consume/:id")
         });
     })
     .put(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
         var response = {};
         consume.findById(req.params.id,function(err,data){
             if(err) {
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
-                if(req.body.userEmail !== undefined) {
-                    data.userEmail = req.body.userEmail;
+                
+                for(var i in req.body){
+                    data[i] = req.body[i];
                 }
-                if(req.body.userPassword !== undefined) {
-                    data.userPassword = req.body.userPassword;
-                }
+                
                 data.save(function(err){
                     if(err) {
                         response = {"error" : true,"message" : "Error updating data"};
@@ -136,8 +160,6 @@ router.route("/consume/:id")
         });
     })
     .delete(function(req,res){
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
         var response = {};
         consume.findById(req.params.id,function(err,data){
             if(err) {
