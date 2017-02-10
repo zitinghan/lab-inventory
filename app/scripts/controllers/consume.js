@@ -114,6 +114,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
       }).then(function successCallback(response) {
         console.log('supplierInsert', response);
         vm.supplier.isAdd = false;
+        vm.supplier.getData();
       }, function errorCallback(response) {
           console.log(response);
       });

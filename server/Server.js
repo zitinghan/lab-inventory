@@ -73,7 +73,7 @@ router.route("/consume")
                 filter[i] = condition[i];
             }
         }
-
+        
         var response = {};
         consume.find(filter)
             .populate('supplier')
