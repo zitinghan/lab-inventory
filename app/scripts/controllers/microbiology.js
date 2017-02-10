@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar', 'globalFunction', function ($http, globalVar, globalFunction) {
+angular.module('labInventoryApp').controller('MicroCtrl', ['$http', 'globalVar', 'globalFunction', function ($http, globalVar, globalFunction) {
   var vm = this;
 
-  this.consume = {
+  this.micro = {
     data: "",
     filter:{},
     init: function(){
@@ -18,11 +18,11 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
 
       $http({
         method: 'POST',
-        url: globalVar.IPAddress + 'consume/',
+        url: globalVar.IPAddress + 'micro/',
         data: {condition: filterCondition}
       }).then(function successCallback(response) {
-        console.log('consume', response);
-        vm.consume.data = response.data.message;
+        console.log('micro', response);
+        vm.micro.data = response.data.message;
       }, function errorCallback(response) {
           console.log(response);
       });
@@ -35,16 +35,16 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
       var updateData = {
         noItem: data.noItem,
         quantity: data.quantity,
-        uPrice: data.uPrice,
+        location: data.location,
         note: data.note
       }
       $http({
         method: 'PUT',
-        url: globalVar.IPAddress + 'consume/'+ data._id,
+        url: globalVar.IPAddress + 'micro/'+ data._id,
         data: updateData
       }).then(function successCallback(response) {
-        console.log('consumeUpdated', response);
-        vm.consume.getData();
+        console.log('microUpdated', response);
+        vm.micro.getData();
       }, function errorCallback(response) {
           console.log(response);
       });
@@ -53,13 +53,13 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
       this.isNew = true;
       $http({
         method: 'POST',
-        url: globalVar.IPAddress + 'consume/insert',
+        url: globalVar.IPAddress + 'micro/insert',
         data: this.new
       }).then(function successCallback(response) {
-        console.log('consumeInsert', response);
-        vm.consume.getData();
-        vm.consume.new = {};
-        vm.consume.isNew = false;
+        console.log('microInsert', response);
+        vm.micro.getData();
+        vm.micro.new = {};
+        vm.micro.isNew = false;
       }, function errorCallback(response) {
           console.log(response);
       });
@@ -68,10 +68,10 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
     delete: function(id){
       $http({
         method: 'DELETE',
-        url: globalVar.IPAddress + 'consume/'+ id,
+        url: globalVar.IPAddress + 'micro/'+ id,
       }).then(function successCallback(response) {
-        console.log('deleteConsume', response);
-        vm.consume.getData();
+        console.log('deletemicro', response);
+        vm.micro.getData();
       }, function errorCallback(response) {
           console.log(response);
       });
@@ -82,7 +82,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
     },
 
   }
-  this.consume.init();
+  this.micro.init();
 
   /**************** supplier ***************/
   this.supplier = {
@@ -128,18 +128,3 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
 
   vm.supplier.init();
 }]);
-
-angular.module('labInventoryApp').directive('ngConfirmClick', [
-    function(){
-        return {
-            link: function (scope, element, attr) {
-                var msg = attr.ngConfirmClick || "Are you sure?";
-                var clickAction = attr.confirmedClick;
-                element.bind('click',function (event) {
-                    if ( window.confirm(msg) ) {
-                        scope.$eval(clickAction)
-                    }
-                });
-            }
-        };
-}])

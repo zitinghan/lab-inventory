@@ -1,13 +1,13 @@
 var mongoose    =   require("mongoose");
 var mongoSchema =   mongoose.Schema;
-var consumeSchema  = {
+var microbiologySchema  = {
     "supplier" : {type: mongoSchema.Types.ObjectId, ref: 'supplier'},
     "item" : String,
     "noItem" : Number,
     "quantity" : Number,
-    "uPrice" : Number,
+    "location" : String,
     "note" : String,
     "updateDate": { type: Date, default: Date.now },
     "insertDate": { type: Date, default: Date.now }
 };
-module.exports = mongoose.model('consume', consumeSchema);;
+module.exports = mongoose.model('microbiology', microbiologySchema);;

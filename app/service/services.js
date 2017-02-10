@@ -10,7 +10,7 @@ angular.module('services', [])
 })
 
 .factory('globalFunction', function(){
-    
+    var page;
     return{
         removeFilterEmpty: function(val){
             var key = Object.keys(val);
@@ -18,10 +18,8 @@ angular.module('services', [])
                 if(typeof val[key[i]]=="undefined" || val[key[i]]===""){
                     delete val[key[i]];
                 }
-            }  
-
+            }
             return val;
         },
-        
     }
 });

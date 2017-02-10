@@ -1,0 +1,133 @@
+<div>
+	<div class="row"> <!-- top bar -->
+		<div class="col-sm-10"> <!-- Filter Function -->
+			<form class="form-inline groupInput">
+			  <div class="form-group">
+			    <label for="supplier">Supplier: </label>
+			    <select class="form-control" ng-model="micro.micro.filter.supplier">
+				  <option value="">All</option>
+				  <option value="{{val._id}}" ng-repeat="val in micro.supplier.data">{{val.supplier}}</option>
+				</select>
+			  </div>
+			  <div class="form-group">
+			    <label for="itemless">Item </label>
+			    <input type="text" class="form-control" id="itemless" style="width:150px" placeholder="Item Name" ng-model="micro.micro.filter.item">
+			  </div>
+			  <div class="form-group">
+			    <label for="itemless">Location </label>
+			    <input type="text" class="form-control" id="itemless" style="width:150px" placeholder="Location" ng-model="micro.micro.filter.location">
+			  </div>
+			  <div class="form-group">
+			    <label for="itemless">Quantity Less Than > </label>
+			    <input type="text" class="form-control" id="itemless" style="width:50px" placeholder="9" ng-model="micro.micro.filter.lessThan">
+			  </div>
+			  <div class="form-group">
+			  	<input class="form-control" id="itemAlert" type="checkbox" ng-model="micro.micro.filter.itemAlert">
+			  	<label for="itemAlert">Item alert</label>
+			  </div>
+			  <button type="submit" class="btn btn-default" ng-click="micro.micro.getData()">Filter</button>
+			</form>
+		</div><!-- Filter Function -->
+		<div class="col-sm-2 text-right">
+
+			<div>
+				<button type="button" class="btn btn-info" ng-click="micro.supplier.add()">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Supplier
+				</button>
+			</div>
+			<br/>
+			<div>
+				<button type="button" class="btn btn-info" ng-click="micro.micro.isNew=true">
+					<span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add New Data
+				</button>
+			</div>
+			
+		</div>
+	</div> <!-- top bar -->
+	
+	<br/>
+	<div ng-if="micro.supplier.isAdd">
+		<form class="form-inline groupInput">
+			<div class="form-group">
+			    <label for="supplierName">Supplier Name: </label>
+			    <input type="text" class="form-control" id="supplierName" placeholder="Supplier Name" ng-model="micro.supplier.new.supplierName">
+			</div>
+			<button type="button" class="btn btn-success" ng-click="micro.supplier.insert()">
+				<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Add
+			</button>
+			<button type="button" class="btn btn-danger" ng-click="micro.supplier.cancelInsert()">
+				<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+			</button>
+		</form>
+		<br/>
+	</div>
+	<div> <!-- Listing Function -->
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Supplier</th>
+					<th>Item</th>
+					<th>Insert Date</th>
+					<th>Number of Items</th>
+					<th>Quantity found</th>
+					<th>Location</th>
+					<th>Note</th>
+					<th>Edit</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-if="micro.micro.isNew">
+					<td></td>
+					<td>
+						<select class="form-control" ng-model="micro.micro.new.supplier">
+						  <option value="{{val._id}}" ng-repeat="val in micro.supplier.data">{{val.supplier}}</option>
+						</select>
+					</td>
+					<td><input class="form-control" type="text" ng-model="micro.micro.new.item"></td>
+					<td>-</td>
+					<td><input class="form-control" type="text" ng-model="micro.micro.new.noItem"></td>
+					<td><input class="form-control" type="text" ng-model="micro.micro.new.quantity"></td>
+					<td><input class="form-control" type="text" ng-model="micro.micro.new.location"></td>
+					<td><input class="form-control" type="text" ng-model="micro.micro.new.note"></td>
+					<td width="10%" class="text-center">
+						<button type="button" class="btn btn-success" ng-click="micro.micro.add()">
+							<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Add
+						</button>
+						<button type="button" class="btn btn-danger" ng-click="micro.micro.cancelInsert()">
+							<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+						</button>
+					</td>
+				</tr>
+				<tr ng-repeat="val in micro.micro.data" ng-class="{'danger': val.quantity<9}">
+					<td>{{$index+1}}</td>
+					<td>{{val.supplier.supplier}}</td>
+					<td>{{val.item}}</td>
+					<td>{{val.insertDate | date:"dd/MM/yyyy HH:mm:ss"}}</td>
+
+					<td><input class="form-control" id="noItem_{{$index+1}}" type="text" ng-model="val.noItem" ng-disabled="!val.enable"></td>
+					<td><input class="form-control" id="quantity_{{$index+1}}" type="text" ng-model="val.quantity" ng-disabled="!val.enable"></td>
+					<td><input class="form-control" id="location_{{$index+1}}" type="text" ng-model="val.location" ng-disabled="!val.enable"></td>
+					<td><input class="form-control" id="note_{{$index+1}}" type="text" ng-model="val.note" ng-disabled="!val.enable"></td>
+
+					<td width="15%" class="text-center">
+						<button type="button" class="btn btn-primary" ng-click="micro.micro.edit(val)" ng-if="!val.enable">
+							<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Edit
+						</button>
+						<button type="button" class="btn btn-danger" ng-if="!val.enable" ng-confirm-click="You sure you want to delete item {{val.item}}?" confirmed-click="micro.micro.delete(val._id)">
+							<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+						</button>
+						<button type="button" class="btn btn-success" ng-click="micro.micro.update(val)" ng-if="val.enable">
+							<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span> Save
+						</button>
+						<button type="button" class="btn btn-danger" ng-click="val.enable=!val.enable" ng-if="val.enable">
+							<span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div> <!-- Listing Function -->
+
+  
+</div>
