@@ -3,6 +3,12 @@
 angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar', 'globalFunction', function ($http, globalVar, globalFunction) {
   var vm = this;
 
+  this.editable = false;
+  var getuser = localStorage.getItem("user");
+  if(getuser=="kahxin"){
+    this.editable = true;
+  }
+
   this.consume = {
     data: "",
     filter:{},
@@ -37,7 +43,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
         quantity: data.quantity,
         uPrice: data.uPrice,
         note: data.note
-      }
+      };
       $http({
         method: 'PUT',
         url: globalVar.IPAddress + 'consume/'+ data._id,
@@ -81,7 +87,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
       this.isNew = false;
     },
 
-  }
+  };
   this.consume.init();
 
   /**************** supplier ***************/
@@ -124,7 +130,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
       this.new = "";
       this.isAdd = false;
     }
-  }
+  };
 
   vm.supplier.init();
 }]);
@@ -137,9 +143,9 @@ angular.module('labInventoryApp').directive('ngConfirmClick', [
                 var clickAction = attr.confirmedClick;
                 element.bind('click',function (event) {
                     if ( window.confirm(msg) ) {
-                        scope.$eval(clickAction)
+                        scope.$eval(clickAction);
                     }
                 });
             }
         };
-}])
+}]);

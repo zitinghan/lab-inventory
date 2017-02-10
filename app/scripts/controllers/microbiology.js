@@ -3,6 +3,12 @@
 angular.module('labInventoryApp').controller('MicroCtrl', ['$http', 'globalVar', 'globalFunction', function ($http, globalVar, globalFunction) {
   var vm = this;
 
+  this.editable = false;
+  var getuser = localStorage.getItem("user");
+  if(getuser=="kahxin"){
+    this.editable = true;
+  }
+
   this.micro = {
     data: "",
     filter:{},
@@ -37,7 +43,7 @@ angular.module('labInventoryApp').controller('MicroCtrl', ['$http', 'globalVar',
         quantity: data.quantity,
         location: data.location,
         note: data.note
-      }
+      };
       $http({
         method: 'PUT',
         url: globalVar.IPAddress + 'micro/'+ data._id,
@@ -81,7 +87,7 @@ angular.module('labInventoryApp').controller('MicroCtrl', ['$http', 'globalVar',
       this.isNew = false;
     },
 
-  }
+  };
   this.micro.init();
 
   /**************** supplier ***************/
@@ -124,7 +130,7 @@ angular.module('labInventoryApp').controller('MicroCtrl', ['$http', 'globalVar',
       this.new = "";
       this.isAdd = false;
     }
-  }
+  };
 
   vm.supplier.init();
 }]);

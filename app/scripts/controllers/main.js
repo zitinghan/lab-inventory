@@ -17,5 +17,5 @@ angular.module('labInventoryApp')
 
     this.clickEvent = function(){
     	console.log('123');
-    }
+    };
   });

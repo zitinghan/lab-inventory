@@ -31,6 +31,11 @@ angular
         controller: 'MicroCtrl',
         controllerAs: 'micro'
       })
+      .when('/admin/:user', {
+        templateUrl: 'views/admin.html',
+        controller: 'AdminCtrl',
+        controllerAs: 'admin'
+      })
       .otherwise({
         redirectTo: '/'
       });
