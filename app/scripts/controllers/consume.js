@@ -4,13 +4,13 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
   var vm = this;
 
   this.editable = false;
-  var getuser = localStorage.getItem("user");
-  if(getuser=="kahxin"){
+  var getuser = localStorage.getItem('user');
+  if(getuser==='kahxin'){
     this.editable = true;
   }
 
   this.consume = {
-    data: "",
+    data: '',
     filter:{},
     init: function(){
       this.getData();
@@ -83,7 +83,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
       });
     },
     cancelInsert: function(){
-      this.new = "";
+      this.new = '';
       this.isNew = false;
     },
 
@@ -92,7 +92,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
 
   /**************** supplier ***************/
   this.supplier = {
-    data:"",
+    data:'',
     filter: {},
     init: function(){
       this.getData();
@@ -127,7 +127,7 @@ angular.module('labInventoryApp').controller('ConsumeCtrl', ['$http', 'globalVar
       });
     },
     cancelInsert: function(){
-      this.new = "";
+      this.new = '';
       this.isAdd = false;
     }
   };
@@ -139,9 +139,9 @@ angular.module('labInventoryApp').directive('ngConfirmClick', [
     function(){
         return {
             link: function (scope, element, attr) {
-                var msg = attr.ngConfirmClick || "Are you sure?";
+                var msg = attr.ngConfirmClick || 'Are you sure?';
                 var clickAction = attr.confirmedClick;
-                element.bind('click',function (event) {
+                element.bind('click',function () {
                     if ( window.confirm(msg) ) {
                         scope.$eval(clickAction);
                     }

@@ -5,7 +5,7 @@ angular.module('services', [])
 
 .factory('globalVar', function() {
     return {
-        IPAddress: 'http://sgbippc0011:3000/', 
+        IPAddress: 'http://sgntupc0008:3000/', 
     }
 })
 
